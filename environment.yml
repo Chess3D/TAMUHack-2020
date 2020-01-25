@@ -1,0 +1,8 @@
+name: TAMUHack-2020
+channels:
+- conda-forge
+dependencies:
+- python=3.7
+- requests
+- beautifulsoup4
+- pip
