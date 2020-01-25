@@ -6,3 +6,5 @@ dependencies:
 - requests
 - beautifulsoup4
 - pip
+- pip:
+  - google-cloud-speech
