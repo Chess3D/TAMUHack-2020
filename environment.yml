@@ -6,10 +6,12 @@ dependencies:
 - PyAudio
 - portaudio
 - pillow
+- fastapi
 - requests
 - pip
 - pip:
   - google-cloud-speech
   - google-cloud-vision
   - google-cloud
+  - uvicorn
   - pymongo
