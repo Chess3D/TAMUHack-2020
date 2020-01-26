@@ -13,7 +13,6 @@ def add_time(time):
 
 
 def get_wpm():
-    print(word_times)
     time_delta = word_times[-1] - word_times[0]
     wpm = len(word_times) / time_delta
     wpm *= 60

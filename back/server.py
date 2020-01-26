@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 import analysis
 
-app = FastAPI()
+app = FastAPI(
+    title='Server to Server Comunication'
+)
 
-@app.get("/")
+@app.get("/speed")
 async def root():
     analysis.update_speech()
     return analysis.get_wpm()
