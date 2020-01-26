@@ -47,35 +47,39 @@ def listen_print_loop(responses):
         # the first result being considered, since once it's `is_final`, it
         # moves on to considering the next utterance.
         result = response.results[0]
+        alternative = result.alternatives[0]
+        for word in alternative.words:
+            print(u"Word: {}".format(word.word))
+            print(u"Start time: {} seconds".format(word.start_time.seconds + word.start_time.nanos * 10**-9))
         if not result.alternatives:
             continue
 
-        # Display the transcription of the top alternative.
-        transcript = result.alternatives[0].transcript
+        # # Display the transcription of the top alternative.
+        # transcript = result.alternatives[0].transcript
 
-        # Display interim results, but with a carriage return at the end of the
-        # line, so subsequent lines will overwrite them.
-        #
-        # If the previous result was longer than this one, we need to print
-        # some extra spaces to overwrite the previous result
-        overwrite_chars = ' ' * (num_chars_printed - len(transcript))
+        # # Display interim results, but with a carriage return at the end of the
+        # # line, so subsequent lines will overwrite them.
+        # #
+        # # If the previous result was longer than this one, we need to print
+        # # some extra spaces to overwrite the previous result
+        # overwrite_chars = ' ' * (num_chars_printed - len(transcript))
 
-        if not result.is_final:
-            sys.stdout.write(transcript + overwrite_chars + '\r')
-            sys.stdout.flush()
+        # if not result.is_final:
+        #     sys.stdout.write(transcript + overwrite_chars + '\r')
+        #     sys.stdout.flush()
 
-            num_chars_printed = len(transcript)
+        #     num_chars_printed = len(transcript)
 
-        else:
-            print(transcript + overwrite_chars)
+        # else:
+        #     print(transcript + overwrite_chars)
 
-            # Exit recognition if any of the transcribed phrases could be
-            # one of our keywords.
-            if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                print('Exiting..')
-                break
+        #     # Exit recognition if any of the transcribed phrases could be
+        #     # one of our keywords.
+        #     if re.search(r'\b(exit|quit)\b', transcript, re.I):
+        #         print('Exiting..')
+        #         break
 
-            num_chars_printed = 0
+        #     num_chars_printed = 0
 
 def main():
     # See http://g.co/cloud/speech/docs/languages
@@ -86,7 +90,8 @@ def main():
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
-        language_code=language_code)
+        language_code=language_code,
+        enable_word_time_offsets=True)
     streaming_config = types.StreamingRecognitionConfig(
         config=config,
         interim_results=True)
@@ -100,7 +105,6 @@ def main():
 
         # Now, put the transcription responses to use.   
         listen_print_loop(responses)
-
 
 if __name__ == '__main__':
     main()
