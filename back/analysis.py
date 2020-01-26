@@ -33,3 +33,18 @@ def okay_word(word):
         avoid = json.load(file_in)
 
     return word not in avoid
+
+
+def load_speech():
+    with open('pipeline/speech.json') as file_in:
+        speech = json.load(file_in)
+    
+    for word in speech:
+        if(not okay_word(word)):
+            with open('pipeline/forbiden_used.json') as file_out:
+                json.dump(word, file_out)
+    
+    for time in speech:
+        add_time(time)
+
+    write_wpm()
