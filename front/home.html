@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Let's Present</title>
+    <h1 class="display-1 text-center">Let's Present</h1>
+    <p id="get_wpm" hidden></p>
+    <p id="get_mood" hidden></p>
+
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        #myChart {
+            height: 100%;
+            width: 100%;
+            min-height: 150px;
+        }
+
+        .zc-ref {
+            display: none;
+        }
+
+        zing-grid[loading] {
+            height: 500px;
+        }
+        div{
+          backround-color: grey
+        }
+    </style>
+</head>
+
+<body bgcolor="grey">
+    <div id='myChart' bgcolor="grey"><a class="zc-ref" href="https://www.zingchart.com/">Charts by ZingChart</a></div>
+    <script>
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+        window.feed = function(callback) {
+
+            var tick = {};
+            var obj = parseInt(wpmGET());
+
+            if(obj > 200) {
+                obj = 200;
+            } else if(obj < 0) {
+                obj = 0;
+            }
+            
+            tick.plot0 = obj;
+            callback(JSON.stringify(tick));
+        };
+        function wpmGET()
+        {
+            var xhr = new XMLHttpRequest();
+            var test;
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                // console.log(this.responseText);
+                document.getElementById("get_wpm").innerHTML = this.responseText;
+            }
+            });
+
+            xhr.open("GET", "http://127.0.0.1:8000/wpm");
+
+            xhr.send();
+
+            return document.getElementById("get_wpm").innerHTML;
+        }
+
+        var myConfig = {
+            type: "gauge",
+            globals: {
+                fontSize: 25
+            },
+            plotarea: {
+                marginTop: 80
+            },
+            plot: {
+                size: '100%',
+                valueBox: {
+                    placement: 'center',
+                    text: '%v', //default
+                    fontSize: 35,
+                    rules: [{
+                            rule: '%v >= 150',
+                            text: '%v<br>Slow Down'
+                        },
+                        {
+                            rule: '%v < 150 && %v > 100',
+                            text: '%v<br>Good'
+                        },
+                        {
+                            rule: '%v < 100',
+                            text: '%v<br> Speed Up'
+                        },
+                    ]
+                }
+            },
+            tooltip: {
+                borderRadius: 5
+            },
+            scaleR: {
+                aperture: 180,
+                minValue: 0,
+                maxValue: 200,
+                step: 50,
+                center: {
+                    visible: false
+                },
+                tick: {
+                    visible: false
+                },
+                item: {
+                    offsetR: 0,
+
+                },
+                labels: ['0', '50', '100', '150', '200'],
+                ring: {
+                    size: 25,
+                    rules: [{
+                            rule: '%v < 100',
+                            backgroundColor: 'red'
+                        },
+                        {
+                            rule: '%v >= 100 && %v < 150',
+                            backgroundColor: 'green'
+                        },
+                        {
+                            rule: '%v >= 150',
+                            backgroundColor: 'red'
+                        },
+                    ]
+                }
+            },
+            refresh: {
+                type: "feed",
+                transport: "js",
+                url: "feed()",
+                interval: 1500,
+                resetTimeout: 1000
+            },
+            series: [{
+                values: [0], // starting value
+                backgroundColor: 'black',
+                indicator: [10, 10, 10, 10, 0.75],
+                animation: {
+                    effect: 2,
+                    method: 1,
+                    sequence: 4,
+                    speed: 900
+                },
+            }]
+        };
+
+        zingchart.render({
+            id: 'myChart',
+            data: myConfig,
+            height: 500,
+            width: '100%'
+        });
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
