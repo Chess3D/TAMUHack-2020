@@ -1,0 +1,2 @@
+https://maps.googleapis.com/maps/api/geocode/json?address=(address)&key=AIzaSyDE6cEZMQ6G2BM71_OzPC8eBI2QlTDgnCE
+https://api.darksky.net/forecast/f8b946a83ec06433b2369a2851e482e2/(longitude),(latitude)
