@@ -8,6 +8,7 @@ dependencies:
 - portaudio
 - requests
 - PyAudio
+- opencv
 - python=3.7
 - pip:
   - google-cloud-speech

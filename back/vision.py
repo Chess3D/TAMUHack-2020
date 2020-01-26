@@ -26,6 +26,7 @@ def detect_face(face_file, max_results=4):
     
     return client.face_detection(image=image, max_results=max_results).face_annotations
 
+
 def capture_image():
     while True:
         _,cv2_im = cap.read()

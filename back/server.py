@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 import analysis
+import vision
 
 app = FastAPI(
     title='Server to Server Comunication'
@@ -27,6 +28,6 @@ async def root():
     analysis.update_speech()
     return int(analysis.get_wpm())
 
-@app.get("/emotion")
+@app.get("/mood")
 async def root():
-        return 0
+    return int(vision.capture_image())
