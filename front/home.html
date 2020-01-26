@@ -10,6 +10,7 @@
     <title>Let's Present</title>
     <h1 class="display-1 text-center">Let's Present</h1>
     <p id="get_wpm" hidden></p>
+    <p id="get_mood" hidden></p>
 
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
     <style>
@@ -45,7 +46,7 @@
         window.feed = function(callback) {
 
             var tick = {};
-            var obj = parseInt(httpGet("http://127.0.0.1:8000/wpm"));
+            var obj = parseInt(wpmGET());
 
             if(obj > 200) {
                 obj = 200;
@@ -56,7 +57,7 @@
             tick.plot0 = obj;
             callback(JSON.stringify(tick));
         };
-        function httpGet(theUrl= "")
+        function wpmGET()
         {
             var xhr = new XMLHttpRequest();
             var test;
@@ -69,7 +70,7 @@
             }
             });
 
-            xhr.open("GET", theUrl);
+            xhr.open("GET", "http://127.0.0.1:8000/wpm");
 
             xhr.send();
 
