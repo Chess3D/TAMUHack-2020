@@ -28,6 +28,6 @@ async def root():
     analysis.update_speech()
     return int(analysis.get_wpm())
 
-@app.get("/mood")
-async def root():
-    return int(vision.capture_image())
+# @app.get("/mood")
+# async def root():
+#     return int(vision.capture_image())
