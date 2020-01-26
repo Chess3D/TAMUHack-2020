@@ -7,8 +7,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>Let't Present</title>
+    <title>Let's Present</title>
     <h1 class="display-1 text-center">Let's Present</h1>
+    <p id="get_wpm" hidden></p>
 
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
     <style>
@@ -44,17 +45,35 @@
         window.feed = function(callback) {
 
             var tick = {};
-            var txt = '{"time":127}'
-            // var obj = JSON.parse(httpGet());
-            tick.plot0 = Math.ceil((Math.random() * 200));
+            var obj = parseInt(httpGet("http://127.0.0.1:8000/wpm"));
+
+            if(obj > 200) {
+                obj = 200;
+            } else if(obj < 0) {
+                obj = 0;
+            }
+            
+            tick.plot0 = obj;
             callback(JSON.stringify(tick));
         };
-        function httpGet(theUrl)
+        function httpGet(theUrl= "")
         {
-          var xmlHttp = new XMLHttpRequest();
-          xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-          xmlHttp.send( null );
-          return xmlHttp.responseText;
+            var xhr = new XMLHttpRequest();
+            var test;
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                // console.log(this.responseText);
+                document.getElementById("get_wpm").innerHTML = this.responseText;
+            }
+            });
+
+            xhr.open("GET", theUrl);
+
+            xhr.send();
+
+            return document.getElementById("get_wpm").innerHTML;
         }
 
         var myConfig = {
