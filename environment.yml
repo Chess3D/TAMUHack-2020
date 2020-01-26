@@ -10,3 +10,4 @@ dependencies:
 - pip:
   - google-cloud-speech
   - google-cloud
+  - pymongo

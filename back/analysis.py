@@ -1,9 +1,16 @@
+import pymongo
 import json
-
 
 max_words = 10
 word_times = []
 
+myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mydb = myclient["tamuhack"]
+mycol = mydb["speech"]
+
+mydict = { "name": "John", "address": "Highway 37" }
+
+x = mycol.insert_one(mydict)
 
 def add_time(time):
     if(len(word_times) >= max_words):
