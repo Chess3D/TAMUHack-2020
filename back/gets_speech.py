@@ -3,7 +3,6 @@ from __future__ import division
 
 import re
 import sys
-import json
 
 import io
 import os
@@ -13,8 +12,14 @@ from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
 import pyaudio
+import pymongo
 
 from microphone import MicrophoneStream
+
+# mongo db
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["tamuhack"]
+col = db["speech"]
 
 # Audio recording parameters
 RATE = 16000
@@ -49,8 +54,9 @@ def listen_print_loop(responses):
         result = response.results[0]
         alternative = result.alternatives[0]
         for word in alternative.words:
-            print(u"Word: {}".format(word.word))
-            print(u"Start time: {} seconds".format(word.start_time.seconds + word.start_time.nanos * 10**-9))
+            wordTime = {"word":word.word, "time":word.start_time.seconds + word.start_time.nanos * 10**-9}
+            r = col.insert_one(wordTime)
+            print(r)
         if not result.alternatives:
             continue
 

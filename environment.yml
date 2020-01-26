@@ -5,9 +5,11 @@ dependencies:
 - python=3.7
 - PyAudio
 - portaudio
+- pillow
 - requests
 - pip
 - pip:
   - google-cloud-speech
+  - google-cloud-vision
   - google-cloud
   - pymongo
