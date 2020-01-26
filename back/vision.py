@@ -28,17 +28,13 @@ def detect_face(face_file, max_results=4):
 
 
 def capture_image():
-    while True:
-        _,cv2_im = cap.read()
-        cv2_im = cv2.cvtColor(cv2_im,cv2.COLOR_BGR2RGB)
-        pil_im = Image.fromarray(cv2_im)
-        pil_im.save("face_file.png")
-        with open("face_file.png", 'rb') as picture:
-            joy = detect_face(picture)
-            if(joy[0] != 0):
-                return joy[0].joy_likelihood
-
-
-
-
-        
+    _,cv2_im = cap.read()
+    cv2_im = cv2.cvtColor(cv2_im,cv2.COLOR_BGR2RGB)
+    pil_im = Image.fromarray(cv2_im)
+    pil_im.save("face_file.png")
+    with open("face_file.png", 'rb') as picture:
+        joy = detect_face(picture)
+        if(joy[0] != 0):
+            return joy[0].joy_likelihood
+        else:
+            return 5
