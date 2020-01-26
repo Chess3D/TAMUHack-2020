@@ -118,11 +118,11 @@
                     text: '%v', //default
                     fontSize: 35,
                     rules: [{
-                            rule: '%v >= 150',
+                            rule: '%v > 150',
                             text: '%v<br>Slow Down'
                         },
                         {
-                            rule: '%v < 150 && %v > 100',
+                            rule: '%v <= 150 && %v => 100',
                             text: '%v<br>Good'
                         },
                         {
