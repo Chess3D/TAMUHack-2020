@@ -5,9 +5,11 @@ dependencies:
 - python=3.7
 - PyAudio
 - portaudio
+- fastapi
 - requests
 - pip
 - pip:
   - google-cloud-speech
   - google-cloud
+  - uvicorn
   - pymongo

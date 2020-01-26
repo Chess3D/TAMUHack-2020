@@ -5,7 +5,7 @@ app = FastAPI(
     title='Server to Server Comunication'
 )
 
-@app.get("/speed")
+@app.get("/wpm")
 async def root():
     analysis.update_speech()
     return analysis.get_wpm()
