@@ -4,13 +4,6 @@ import json
 max_words = 10
 word_times = []
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["tamuhack"]
-mycol = mydb["speech"]
-
-mydict = { "name": "John", "address": "Highway 37" }
-
-x = mycol.insert_one(mydict)
 
 def add_time(time):
     if(len(word_times) >= max_words):
@@ -29,29 +22,43 @@ def get_wpm():
 
 
 def write_wpm():
-    wpm = get_wpm()
+    wpm = {'wpm': get_wpm()}
     
-    with open('pipeline/wpm.json', 'w') as file_out:
-        json.dump(wpm, file_out)
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    database = client['tamuhack']
+    collection = database['speed']
+
+    collection.insert_one(wpm)
 
 
-def okay_word(word):
-    with open('pipeline/avoid.json') as file_in:
-        avoid = json.load(file_in)
+# def check_word(word):
+#     client = pymongo.MongoClient('mongodb://localhost:27017/')
+#     database = client['tamuhack']
+#     collection = database['avoid']
 
-    return word not in avoid
+#     with open('pipeline/avoid.json') as file_in:
+#         avoid = json.load(file_in)
+
+#     if word in avoid:
+#         collection.insert_one({'avoid': word})
 
 
-def load_speech():
-    with open('pipeline/speech.json') as file_in:
-        speech = json.load(file_in)
+def update_speech():
+    client = pymongo.MongoClient('mongodb://localhost:27017/')
+    database = client['tamuhack']
+    collection = database['speech']
+
+    temp = list(collection.find().sort('_id', -1).limit(max_words))
     
-    for word in speech:
-        if(not okay_word(word)):
-            with open('pipeline/forbiden_used.json') as file_out:
-                json.dump(word, file_out)
+    words = []
+    times = []
+
+    for dic in temp:
+        words.append(dic['word'])
+        times.append(dic['time'])
+
+    # for word in words:
+    #     check_word(word)
     
-    for time in speech:
+    for time in times:
         add_time(time)
-
-    write_wpm()
