@@ -46,15 +46,22 @@
         window.feed = function(callback) {
 
             var tick = {};
-            var obj = parseInt(wpmGET());
+            var wpm = parseInt(wpmGET());
+            var mood = parseInt(moodGET());
 
-            if(obj > 200) {
-                obj = 200;
-            } else if(obj < 0) {
-                obj = 0;
+            if(wpm > 200) {
+                wpm = 200;
+            } else if(wpm < 0) {
+                wpm = 0;
+            }
+
+            if(mood < 3) {
+                document.getElementById("motivation").innerHTML = "You are doing GREAT!";
+            } else {
+                document.getElementById("motivation").innerHTML = "";
             }
             
-            tick.plot0 = obj;
+            tick.plot0 = wpm;
             callback(JSON.stringify(tick));
         };
         function wpmGET()
@@ -75,6 +82,25 @@
             xhr.send();
 
             return document.getElementById("get_wpm").innerHTML;
+        }
+        function moodGET()
+        {
+            var xhr = new XMLHttpRequest();
+            var test;
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                // console.log(this.responseText);
+                document.getElementById("get_mood").innerHTML = this.responseText;
+            }
+            });
+
+            xhr.open("GET", "http://127.0.0.1:8000/mood");
+
+            xhr.send();
+
+            return document.getElementById("get_mood").innerHTML;
         }
 
         var myConfig = {
@@ -169,6 +195,7 @@
             width: '100%'
         });
     </script>
+    <p align="center" id="motivation"></p>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
